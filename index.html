@@ -3,40 +3,157 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#8d2f24">
-<title>Cold Fermentation Pizza Calculator</title>
+<meta name="theme-color" content="#201713">
+<title>Cold Fermentation Pizza Lab</title>
 <style>
-:root{--bg:#f7f1e8;--card:#fffdf9;--ink:#2e2a27;--muted:#70675f;--line:#e5d7ca;--accent:#8d2f24;--accent-soft:#f3dfc8;--good:#315f47;--warn:#815514}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-main{max-width:780px;margin:auto;padding:20px 16px 64px}header{padding:8px 2px 12px}h1{font-size:34px;line-height:1.06;margin:8px 0}h2{font-size:22px;margin:0 0 12px}h3{font-size:19px;margin:0 0 8px}.lead{color:var(--muted);max-width:680px;margin:0}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin:16px 0;box-shadow:0 1px 0 rgba(70,40,20,.04)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-label{display:block;font-weight:720;margin:14px 0 6px}.sub{font-size:12px;color:var(--muted);font-weight:500}
-input,select,button{font:inherit}input,select{width:100%;min-height:46px;padding:10px 12px;border:1px solid #b7a99c;border-radius:10px;background:#fff;color:var(--ink)}
-input:focus,select:focus{outline:3px solid #e5c9a8;outline-offset:1px}button{border:0;border-radius:12px;padding:11px 15px;font-weight:760;cursor:pointer}
-.primary{background:var(--accent);color:#fff}.secondary{background:#efe7de;color:var(--ink)}.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
-.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:var(--accent-soft);font-size:13px;font-weight:750}
-.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{padding:14px;border-radius:14px;background:#faf6f1;border:1px solid var(--line)}.stat b{display:block;font-size:20px}.stat span{font-size:12px;color:var(--muted)}
-.row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #eee5dc}.row:last-child{border-bottom:0}.row strong{text-align:right}.measure{display:block;color:var(--muted);font-size:12px;font-weight:500}
-.timeline{margin-left:8px}.event{position:relative;padding:0 0 18px 28px;border-left:2px solid #dbc7b4}.event:last-child{border-left-color:transparent}.event:before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--accent)}.event time{font-weight:800}.event p{margin:3px 0 0;color:var(--muted)}
-.progress{height:10px;background:#eadfd4;border-radius:99px;overflow:hidden;margin:8px 0 16px}.bar{height:100%;background:var(--accent);width:0;transition:width .2s}
-.when{color:var(--accent);font-weight:800;margin:0 0 8px}.qtybox{background:#fbf3e9;border:1px solid #ead8c3;border-radius:14px;padding:14px;margin:12px 0}.qtybox>b{display:block;margin-bottom:5px}
-ol,ul{padding-left:22px}li{margin:8px 0}.note{padding:12px 14px;border-radius:12px;background:#f6f6ef;border-left:4px solid #8a7f58;color:#5f583f;font-size:14px}.good{border-left-color:var(--good);color:var(--good)}.warn{border-left-color:var(--warn);color:#6f4b14}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.tiny{font-size:12px;color:var(--muted)}details{border-top:1px solid var(--line);padding:14px 0}summary{font-weight:750;cursor:pointer}footer{color:var(--muted);font-size:12px;margin-top:28px}
-.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.method-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}.method-card input{width:auto;min-height:auto;margin-right:7px}.method-card label{margin:0}.method-card p{margin:5px 0 0;color:var(--muted);font-size:13px}
-@media(max-width:620px){h1{font-size:30px}.grid,.grid3,.summary,.method-grid{grid-template-columns:1fr}.card{padding:17px}.row strong{max-width:54%}}
+:root{
+  --bg:#181310;
+  --card:#fff9f1;
+  --ink:#2e2a27;
+  --muted:#74695f;
+  --line:#ead8c6;
+  --accent:#b63a2b;
+  --accent2:#3f6b45;
+  --gold:#e7b56a;
+  --good:#315f47;
+  --warn:#815514
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(182,58,43,.38),transparent 34rem),
+    radial-gradient(circle at 90% 15%,rgba(231,181,106,.12),transparent 28rem),
+    linear-gradient(180deg,#2c211c 0%,#1b1512 45%,#120f0d 100%);
+  color:var(--ink);
+  font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh
+}
+main{max-width:820px;margin:auto;padding:24px 16px 82px}
+header{padding:24px 4px 22px;text-align:center}
+h1{font-size:40px;line-height:1.03;margin:10px 0;color:#fffaf3;letter-spacing:-.7px}
+h2{font-size:22px;margin:0 0 12px}
+h3{font-size:19px;margin:0 0 8px}
+.lead{color:#d9c9bc;max-width:690px;margin:0 auto}
+.pill{
+  display:inline-block;padding:7px 11px;border-radius:999px;
+  background:rgba(255,250,243,.10);border:1px solid rgba(255,255,255,.18);
+  color:#f7dfca;font-size:13px;font-weight:760;backdrop-filter:blur(8px)
+}
+.hero-mini{
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px
+}
+.hero-mini span{
+  color:#f7e7d7;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;font-size:12px
+}
+.card{
+  background:linear-gradient(180deg,#fffaf3 0%,#fff7ee 100%);
+  border:1px solid rgba(255,255,255,.36);
+  border-radius:22px;padding:22px;margin:18px 0;
+  box-shadow:0 16px 42px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.85)
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+label{display:block;font-weight:720;margin:14px 0 6px}
+.sub{font-size:12px;color:var(--muted);font-weight:500}
+input,select,button{font:inherit}
+input,select{
+  width:100%;min-height:48px;padding:10px 12px;
+  border:1px solid #b9aa9c;border-radius:12px;background:#fff;color:var(--ink)
+}
+input:focus,select:focus{outline:3px solid rgba(182,58,43,.18);border-color:var(--accent)}
+button{
+  border:0;border-radius:13px;padding:12px 16px;font-weight:780;cursor:pointer;
+  transition:transform .15s ease,box-shadow .15s ease
+}
+button:hover{transform:translateY(-1px)}
+button:active{transform:translateY(0)}
+.primary{
+  background:linear-gradient(135deg,var(--accent),#8f281f);color:#fff;
+  box-shadow:0 8px 18px rgba(182,58,43,.25)
+}
+.secondary{background:#efe7de;color:var(--ink)}
+.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{
+  padding:15px;border-radius:16px;
+  background:linear-gradient(180deg,#fff,#fbf5ef);
+  border:1px solid var(--line);box-shadow:0 4px 10px rgba(60,30,10,.05)
+}
+.stat b{display:block;font-size:21px;color:var(--accent)}
+.stat span{font-size:12px;color:var(--muted)}
+.row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #eee5dc}
+.row:last-child{border-bottom:0}
+.row strong{text-align:right}
+.measure{display:block;color:var(--muted);font-size:12px;font-weight:500}
+.timeline{margin-left:8px}
+.event{position:relative;padding:0 0 18px 28px;border-left:2px solid #dbc7b4}
+.event:last-child{border-left-color:transparent}
+.event:before{
+  content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--gold));box-shadow:0 0 0 4px #fff4e9
+}
+.event time{font-weight:800}
+.event p{margin:3px 0 0;color:var(--muted)}
+.progress{height:11px;background:#e8d9ca;border-radius:99px;overflow:hidden;margin:8px 0 18px}
+.bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));width:0;transition:width .2s}
+.when{color:var(--accent);font-weight:800;margin:0 0 8px}
+.qtybox{
+  background:linear-gradient(180deg,#fff4e7,#fbecdc);
+  border:1px solid #ead2b9;border-radius:15px;padding:14px;margin:12px 0
+}
+.qtybox>b{display:block;margin-bottom:5px}
+ol,ul{padding-left:22px}
+li{margin:8px 0}
+.note{
+  padding:12px 14px;border-radius:12px;background:#f6f6ef;
+  border-left:4px solid #8a7f58;color:#5f583f;font-size:14px
+}
+.good{border-left-color:var(--good);color:var(--good)}
+.warn{border-left-color:var(--warn);color:#6f4b14}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.tiny{font-size:12px;color:var(--muted)}
+details{border-top:1px solid var(--line);padding:14px 0}
+summary{font-weight:750;cursor:pointer}
+footer{color:#a89a8f;font-size:12px;margin-top:28px;text-align:center}
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.method-card{
+  border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff;
+  transition:.18s ease;cursor:pointer
+}
+.method-card:has(input:checked){
+  border-color:var(--accent);box-shadow:0 0 0 3px rgba(182,58,43,.10);background:#fff6f0
+}
+.method-card input{width:auto;min-height:auto;margin-right:8px;accent-color:var(--accent)}
+.method-card label{margin:0;font-size:17px}
+.method-card p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.section-kicker{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+@media(max-width:620px){
+  h1{font-size:31px}
+  .grid,.grid3,.summary,.method-grid{grid-template-columns:1fr}
+  .card{padding:17px}
+  .row strong{max-width:54%}
+}
 </style>
 </head>
 <body>
 <main>
 <header>
-<span class="pill">Poolish • cold fermentation • step-by-step</span>
-<h1>Cold Fermentation Pizza Calculator 🍕</h1>
-<p class="lead">Set your pizza size, quantity, fermentation time, mixing method and oven. The app calculates the dough, works backward from bake time, and repeats the exact quantities at every step.</p>
+<span class="pill">Poolish • cold fermentation • guided baking</span>
+<h1>🔥 Cold Fermentation Pizza Lab 🍕</h1>
+<p class="lead">Build your batch, choose your method, and follow the exact quantities from poolish to oven.</p>
+<div class="hero-mini">
+  <span>⚖️ exact grams</span>
+  <span>❄️ 24–72 h</span>
+  <span>🌀 mixer or hand</span>
+  <span>🔥 oven-specific</span>
+</div>
 </header>
 
 <section class="card">
-<h2>1. Pizza setup</h2>
+<div class="section-kicker">Build your batch</div>
+<h2>🍕 1. Pizza setup</h2>
 <div class="grid">
 <div><label for="count">Number of pizzas</label><input id="count" type="number" min="1" max="20" step="1" value="6"></div>
 <div><label for="diameter">Pizza diameter <span class="sub">inches</span></label><input id="diameter" type="number" min="8" max="18" step="0.5" value="10"></div>
@@ -48,7 +165,8 @@ ol,ul{padding-left:22px}li{margin:8px 0}.note{padding:12px 14px;border-radius:12
 </section>
 
 <section class="card">
-<h2>2. Mixing method</h2>
+<div class="section-kicker">Choose your workflow</div>
+<h2>🌀 2. Mixing method</h2>
 <div class="method-grid">
 <div class="method-card"><label><input type="radio" name="method" value="mixer" checked> KitchenAid mixer</label><p>Dough hook, controlled speeds, short rest and final knead.</p></div>
 <div class="method-card"><label><input type="radio" name="method" value="manual"> By hand + folds</label><p>No mixer. Hand mix, rest, then stretch-and-fold sets.</p></div>
@@ -56,18 +174,20 @@ ol,ul{padding-left:22px}li{margin:8px 0}.note{padding:12px 14px;border-radius:12
 </section>
 
 <section class="card">
-<h2>3. Fermentation & oven</h2>
+<div class="section-kicker">Plan the fermentation</div>
+<h2>❄️🔥 3. Fermentation & oven</h2>
 <div class="grid">
 <div><label for="ferment">Total fermentation plan</label><select id="ferment"><option value="24">24 hours</option><option value="48" selected>48 hours</option><option value="72">72 hours</option></select></div>
 <div><label for="oven">Oven</label><select id="oven"><option value="outdoor" selected>Small outdoor pizza oven</option><option value="breville">Breville countertop oven</option><option value="home">Regular home oven</option></select></div>
 </div>
 <label for="bakeTime">I want to bake at</label>
 <input id="bakeTime" type="datetime-local">
-<p class="tiny">Timeline assumes a refrigerator around 4°C / 39°F. Dough develops according to temperature and yeast activity, so use the visual readiness checks too.</p>
+<p class="tiny">Timeline assumes a refrigerator around 4°C / 39°F. Use the visual readiness checks too.</p>
 </section>
 
 <section class="card">
-<h2>4. Dough settings</h2>
+<div class="section-kicker">Fine tune</div>
+<h2>⚖️ 4. Dough settings</h2>
 <div class="grid3">
 <div><label for="hydration">Hydration %</label><input id="hydration" type="number" min="55" max="80" step="0.5" value="65"></div>
 <div><label for="salt">Salt %</label><input id="salt" type="number" min="1.5" max="4" step="0.1" value="2.7"></div>
@@ -82,20 +202,23 @@ ol,ul{padding-left:22px}li{margin:8px 0}.note{padding:12px 14px;border-radius:12
 </section>
 
 <section class="card" aria-live="polite">
-<h2>Your calculated dough</h2>
+<div class="section-kicker">Your formula</div>
+<h2>📋 Your calculated dough</h2>
 <div class="summary" id="stats"></div>
 <div id="ingredients"></div>
 <p class="tiny">Spoon measures are approximate. For yeast and salt, use a gram scale whenever possible.</p>
 </section>
 
 <section class="card">
-<h2>Your backward timeline</h2>
+<div class="section-kicker">Work backward from dinner</div>
+<h2>⏱️ Your backward timeline</h2>
 <div id="timeline" class="timeline"></div>
 <div class="actions"><button id="calendarBtn" type="button" class="secondary">Download calendar milestones (.ics)</button></div>
 </section>
 
 <section class="card">
-<h2>5. Guided cook mode</h2>
+<div class="section-kicker">Cook mode</div>
+<h2>👨‍🍳 5. Guided cook mode</h2>
 <div class="progress"><div id="bar" class="bar"></div></div>
 <div id="stepHost"></div>
 <div class="actions"><button id="backBtn" class="secondary" type="button">← Back</button><button id="nextBtn" class="primary" type="button">Next step →</button></div>
@@ -108,7 +231,7 @@ ol,ul{padding-left:22px}li{margin:8px 0}.note{padding:12px 14px;border-radius:12
 <details><summary>Flour</summary><p>For a hot outdoor pizza oven, 00 pizza flour is ideal if available. Strong all-purpose or bread flour also works. For a home oven, bread flour or strong AP flour is often easier to brown. Fine semolina is used mainly for peel dusting.</p></details>
 </section>
 
-<footer>Cold Fermentation Pizza Calculator • quantities recalculate instantly</footer>
+<footer>Cold Fermentation Pizza Lab • quantities recalculate instantly</footer>
 </main>
 
 <script>
