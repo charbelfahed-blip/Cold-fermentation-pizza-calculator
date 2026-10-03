@@ -129,12 +129,30 @@ footer{color:#a89a8f;font-size:12px;margin-top:28px;text-align:center}
 .method-card label{margin:0;font-size:17px}
 .method-card p{margin:5px 0 0;color:var(--muted);font-size:13px}
 .section-kicker{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.start-panel{text-align:center;border:1px solid rgba(231,181,106,.5);background:linear-gradient(180deg,#fff9ef,#fff2e3)}
+.start-panel h2{font-size:28px;margin-bottom:8px}
+.start-summary,.cook-summary{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0}
+.start-summary span,.cook-summary span{display:inline-flex;align-items:center;gap:5px;padding:8px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:13px;font-weight:720}
+.start-btn{width:100%;min-height:58px;font-size:18px;letter-spacing:.03em;margin-top:4px}
+#cookMode[hidden]{display:none!important}
+.cook-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+.cook-topbar .cook-summary{justify-content:flex-start;margin:0;flex:1}
+.cook-topbar .cook-summary span{padding:6px 9px;font-size:12px}
+body.cooking header,body.cooking #setupArea,body.cooking #notesCard{display:none}
+body.cooking main{max-width:760px;padding-top:14px}
+body.cooking #cookMode{margin-top:0;min-height:calc(100vh - 28px)}
+body.cooking .cook-actions{position:sticky;bottom:10px;padding:12px;margin:18px -4px -4px;background:rgba(255,249,241,.94);backdrop-filter:blur(12px);border:1px solid rgba(234,216,198,.9);border-radius:16px;box-shadow:0 12px 28px rgba(0,0,0,.18);z-index:10}
+body.cooking .cook-actions button{flex:1;min-height:50px}
 @media(max-width:620px){
   h1{font-size:31px}
   .grid,.grid3,.summary,.method-grid{grid-template-columns:1fr}
   .card{padding:17px}
   .row strong{max-width:54%}
+  .cook-topbar{align-items:flex-start;flex-direction:column}
+  .cook-topbar .ghost{width:100%}
+  .start-panel h2{font-size:24px}
 }
+
 </style>
 </head>
 <body>
@@ -151,6 +169,7 @@ footer{color:#a89a8f;font-size:12px;margin-top:28px;text-align:center}
 </div>
 </header>
 
+<div id="setupArea">
 <section class="card">
 <div class="section-kicker">Build your batch</div>
 <h2>🍕 1. Pizza setup</h2>
@@ -194,11 +213,11 @@ footer{color:#a89a8f;font-size:12px;margin-top:28px;text-align:center}
 <div><label for="poolishPct">Poolish flour %</label><input id="poolishPct" type="number" min="20" max="60" step="1" value="40"></div>
 </div>
 <div class="grid3">
-<div><label for="oil">Olive oil %</label><input id="oil" type="number" min="0" max="5" step="0.1" value="0"></div>
+<div><label for="oil">Olive oil % <span class="sub">oven/style</span></label><input id="oil" type="number" min="0" max="5" step="0.1" value="0"></div>
 <div><label for="honey">Honey %</label><input id="honey" type="number" min="0" max="2" step="0.1" value="0.5"></div>
 <div><label for="yeast">Instant yeast %</label><input id="yeast" type="number" min="0.02" max="1" step="0.01" value="0.10"></div>
 </div>
-<div class="actions"><button type="button" class="ghost" id="resetFormula">Use recommended settings for this oven/time</button></div>
+<p class="tiny">For a very hot Neapolitan-style outdoor bake, 0% oil is the baseline. Add roughly 1–2.5% when you want a softer crust or are baking longer at lower heat.</p><div class="actions"><button type="button" class="ghost" id="resetFormula">Use recommended settings for this oven/time</button></div>
 </section>
 
 <section class="card" aria-live="polite">
@@ -216,15 +235,28 @@ footer{color:#a89a8f;font-size:12px;margin-top:28px;text-align:center}
 <div class="actions"><button id="calendarBtn" type="button" class="secondary">Download calendar milestones (.ics)</button></div>
 </section>
 
-<section class="card">
+<section class="card start-panel" id="startPanel">
+<div class="section-kicker">Ready when you are</div>
+<h2>🍕 Your pizza plan is ready</h2>
+<p class="tiny">Review the plan below, then enter Cook Mode. Your setup stays saved and you can return to edit it at any time.</p>
+<div id="startSummary" class="start-summary"></div>
+<button id="startRecipe" type="button" class="primary start-btn">START RECIPE →</button>
+</section>
+</div>
+
+<section class="card" id="cookMode" hidden>
+<div class="cook-topbar">
+<div id="cookSummary" class="cook-summary"></div>
+<button id="editSetup" class="ghost" type="button">← Edit setup</button>
+</div>
 <div class="section-kicker">Cook mode</div>
-<h2>👨‍🍳 5. Guided cook mode</h2>
+<h2>👨‍🍳 Guided cook mode</h2>
 <div class="progress"><div id="bar" class="bar"></div></div>
 <div id="stepHost"></div>
-<div class="actions"><button id="backBtn" class="secondary" type="button">← Back</button><button id="nextBtn" class="primary" type="button">Next step →</button></div>
+<div class="actions cook-actions"><button id="backBtn" class="secondary" type="button">← Back</button><button id="nextBtn" class="primary" type="button">Next step →</button></div>
 </section>
 
-<section class="card">
+<section class="card" id="notesCard">
 <h2>Notes</h2>
 <details open><summary>Poolish style</summary><p>This calculator uses a Vito Iacopelli-inspired concept: a 100%-hydration poolish with a little honey, then final dough mixing, balling and cold fermentation. It is an adaptable calculator rather than a transcript of one specific video formula.</p></details>
 <details><summary>When the dough is ready</summary><p>A mature dough ball is relaxed, slightly domed, aerated around the edges, and stretches without immediately snapping back. If it is still tight and dense, allow more room-temperature proofing. If it is extremely slack and fragile, handle gently and bake sooner.</p></details>
@@ -289,6 +321,22 @@ function ovenText(){
 }
 function row(label,main,measure=''){return '<div class="row"><span>'+label+'</span><strong>'+main+(measure?'<span class="measure">'+measure+'</span>':'')+'</strong></div>'}
 function event(t,title,body){return '<div class="event"><time>'+fmtDate(t)+'</time><p><strong>'+title+'</strong> — '+body+'</p></div>'}
+function planSummary(){
+ const d=dough(),t=times();
+ const methodLabel=method()==='mixer'?'KitchenAid':'By hand + folds';
+ const ovenLabel=el('oven').options[el('oven').selectedIndex].text;
+ return '<span>🍕 '+num('count')+' × '+num('diameter')+'\"</span>'+
+        '<span>⚖️ '+d.ball+' g each</span>'+
+        '<span>❄️ '+num('ferment')+' h</span>'+
+        '<span>🌀 '+methodLabel+'</span>'+
+        '<span>🔥 '+ovenLabel+'</span>'+
+        '<span>🕒 '+fmtDate(t.bake)+'</span>';
+}
+function updatePlanSummary(){
+ const s=planSummary();
+ if(el('startSummary'))el('startSummary').innerHTML=s;
+ if(el('cookSummary'))el('cookSummary').innerHTML=s;
+}
 function calculate(){
  el('customWrap').hidden=el('crust').value!=='custom';
  const d=dough(),p=fermentationPlan(),t=times(),o=ovenText();
@@ -297,6 +345,7 @@ function calculate(){
  if(d.oilG>0)ing+=row('Olive oil',g(d.oilG,1),Math.round(d.oilG/.91)+' mL • '+spoon(d.oilG,'oil'));
  ing+=row('Honey',g(d.honeyG,1),Math.round(d.honeyG/1.4)+' mL • '+spoon(d.honeyG,'honey'))+row('Instant dry yeast',g(d.yeastG,2),spoon(d.yeastG,'yeast'))+row('Fine semolina for dusting','about '+g(8*num('count')),'not part of the dough');
  el('ingredients').innerHTML=ing;
+ updatePlanSummary();
  el('timeline').innerHTML=event(t.poolishMix,'Mix poolish','1 hour at room temperature')+event(t.poolishFridge,'Poolish → refrigerator','cold ferment about '+p.poolishCold+' hours')+event(t.finalMix,method()==='mixer'?'KitchenAid final mix':'Hand mix + folds','make final dough and build strength')+event(t.ballFridge,'Dough balls → refrigerator','cold ferment about '+p.ballCold.toFixed(1)+' hours')+event(t.warm,'Take dough balls out','room-temperature proof about '+p.warm+' hours')+event(t.preheat,'Preheat '+o.name,'fully heat the stone/steel')+event(t.bake,'Bake','stretch, top and cook');
  renderSteps(); save();
 }
@@ -326,7 +375,26 @@ function save(){
  const ids=['count','diameter','crust','customBall','ferment','oven','bakeTime','hydration','salt','poolishPct','oil','honey','yeast']; const o={method:method()}; ids.forEach(id=>o[id]=el(id).value); localStorage.setItem('pizzaCalcSettings',JSON.stringify(o));
 }
 function load(){
- try{const o=JSON.parse(localStorage.getItem('pizzaCalcSettings')||'{}');Object.keys(o).forEach(k=>{if(k==='method'){const r=document.querySelector('input[name="method"][value="'+o[k]+'"]');if(r)r.checked=true}else if(el(k))el(k).value=o[k]})}catch(e){}
+ try{
+  const raw=localStorage.getItem('pizzaCalcSettings');
+  if(!raw)return false;
+  const o=JSON.parse(raw);
+  Object.keys(o).forEach(k=>{if(k==='method'){const r=document.querySelector('input[name="method"][value="'+o[k]+'"]');if(r)r.checked=true}else if(el(k))el(k).value=o[k]});
+  return Object.keys(o).length>0;
+ }catch(e){return false}
+}
+function enterCookMode(){
+ stepIndex=0;
+ document.body.classList.add('cooking');
+ el('cookMode').hidden=false;
+ updatePlanSummary();
+ renderSteps();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function exitCookMode(){
+ document.body.classList.remove('cooking');
+ el('cookMode').hidden=true;
+ setTimeout(()=>el('startPanel').scrollIntoView({behavior:'smooth',block:'center'}),50);
 }
 function calendar(){
  const t=times(),p=fermentationPlan(),o=ovenText();
@@ -335,9 +403,9 @@ function calendar(){
  events.forEach((e,i)=>{const end=new Date(e[0].getTime()+30*60000);ics+='BEGIN:VEVENT\r\nUID:pizza-'+i+'-'+Date.now()+'@local\r\nDTSTAMP:'+stamp(new Date())+'\r\nDTSTART:'+stamp(e[0])+'\r\nDTEND:'+stamp(end)+'\r\nSUMMARY:'+e[1].replace(/,/g,'\\,')+'\r\nDESCRIPTION:'+e[2].replace(/,/g,'\\,')+'\r\nBEGIN:VALARM\r\nTRIGGER:-PT15M\r\nACTION:DISPLAY\r\nDESCRIPTION:'+e[1].replace(/,/g,'\\,')+'\r\nEND:VALARM\r\nEND:VEVENT\r\n'});ics+='END:VCALENDAR\r\n';
  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pizza-timeline.ics';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
-load();
+const hadSavedSettings=load();
 if(!el('bakeTime').value){const d=new Date(Date.now()+48*3600000);d.setMinutes(0,0,0);el('bakeTime').value=localInputValue(d)}
-applyDefaults();
+if(hadSavedSettings){formulaTouched=true;calculate()}else{applyDefaults()}
 ['count','diameter','crust','customBall','bakeTime','hydration','salt','poolishPct','oil','honey','yeast'].forEach(id=>{
  el(id).addEventListener('input',()=>{if(['hydration','salt','poolishPct','oil','honey','yeast'].includes(id))formulaTouched=true;calculate()});
  el(id).addEventListener('change',calculate);
@@ -347,6 +415,8 @@ el('oven').addEventListener('change',applyDefaults);
 document.querySelectorAll('input[name="method"]').forEach(r=>r.addEventListener('change',()=>{stepIndex=0;calculate()}));
 el('resetFormula').addEventListener('click',applyDefaults);
 el('calendarBtn').addEventListener('click',calendar);
+el('startRecipe').addEventListener('click',enterCookMode);
+el('editSetup').addEventListener('click',exitCookMode);
 el('backBtn').addEventListener('click',()=>{if(stepIndex>0)stepIndex--;renderSteps()});
 el('nextBtn').addEventListener('click',()=>{stepIndex=stepIndex===7?0:stepIndex+1;renderSteps()});
 calculate();
