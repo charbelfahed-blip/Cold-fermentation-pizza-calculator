@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#8d2f24">
+<title>Cold Fermentation Pizza Calculator</title>
+<style>
+:root{--bg:#f7f1e8;--card:#fffdf9;--ink:#2e2a27;--muted:#70675f;--line:#e5d7ca;--accent:#8d2f24;--accent-soft:#f3dfc8;--good:#315f47;--warn:#815514}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:780px;margin:auto;padding:20px 16px 64px}header{padding:8px 2px 12px}h1{font-size:34px;line-height:1.06;margin:8px 0}h2{font-size:22px;margin:0 0 12px}h3{font-size:19px;margin:0 0 8px}.lead{color:var(--muted);max-width:680px;margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin:16px 0;box-shadow:0 1px 0 rgba(70,40,20,.04)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+label{display:block;font-weight:720;margin:14px 0 6px}.sub{font-size:12px;color:var(--muted);font-weight:500}
+input,select,button{font:inherit}input,select{width:100%;min-height:46px;padding:10px 12px;border:1px solid #b7a99c;border-radius:10px;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:3px solid #e5c9a8;outline-offset:1px}button{border:0;border-radius:12px;padding:11px 15px;font-weight:760;cursor:pointer}
+.primary{background:var(--accent);color:#fff}.secondary{background:#efe7de;color:var(--ink)}.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:var(--accent-soft);font-size:13px;font-weight:750}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{padding:14px;border-radius:14px;background:#faf6f1;border:1px solid var(--line)}.stat b{display:block;font-size:20px}.stat span{font-size:12px;color:var(--muted)}
+.row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #eee5dc}.row:last-child{border-bottom:0}.row strong{text-align:right}.measure{display:block;color:var(--muted);font-size:12px;font-weight:500}
+.timeline{margin-left:8px}.event{position:relative;padding:0 0 18px 28px;border-left:2px solid #dbc7b4}.event:last-child{border-left-color:transparent}.event:before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--accent)}.event time{font-weight:800}.event p{margin:3px 0 0;color:var(--muted)}
+.progress{height:10px;background:#eadfd4;border-radius:99px;overflow:hidden;margin:8px 0 16px}.bar{height:100%;background:var(--accent);width:0;transition:width .2s}
+.when{color:var(--accent);font-weight:800;margin:0 0 8px}.qtybox{background:#fbf3e9;border:1px solid #ead8c3;border-radius:14px;padding:14px;margin:12px 0}.qtybox>b{display:block;margin-bottom:5px}
+ol,ul{padding-left:22px}li{margin:8px 0}.note{padding:12px 14px;border-radius:12px;background:#f6f6ef;border-left:4px solid #8a7f58;color:#5f583f;font-size:14px}.good{border-left-color:var(--good);color:var(--good)}.warn{border-left-color:var(--warn);color:#6f4b14}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.tiny{font-size:12px;color:var(--muted)}details{border-top:1px solid var(--line);padding:14px 0}summary{font-weight:750;cursor:pointer}footer{color:var(--muted);font-size:12px;margin-top:28px}
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.method-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}.method-card input{width:auto;min-height:auto;margin-right:7px}.method-card label{margin:0}.method-card p{margin:5px 0 0;color:var(--muted);font-size:13px}
+@media(max-width:620px){h1{font-size:30px}.grid,.grid3,.summary,.method-grid{grid-template-columns:1fr}.card{padding:17px}.row strong{max-width:54%}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<span class="pill">Poolish • cold fermentation • step-by-step</span>
+<h1>Cold Fermentation Pizza Calculator 🍕</h1>
+<p class="lead">Set your pizza size, quantity, fermentation time, mixing method and oven. The app calculates the dough, works backward from bake time, and repeats the exact quantities at every step.</p>
+</header>
+
+<section class="card">
+<h2>1. Pizza setup</h2>
+<div class="grid">
+<div><label for="count">Number of pizzas</label><input id="count" type="number" min="1" max="20" step="1" value="6"></div>
+<div><label for="diameter">Pizza diameter <span class="sub">inches</span></label><input id="diameter" type="number" min="8" max="18" step="0.5" value="10"></div>
+</div>
+<div class="grid">
+<div><label for="crust">Crust / dough-ball size</label><select id="crust"><option value="0.88">Thin & light</option><option value="1" selected>Classic airy</option><option value="1.12">Puffy / generous</option><option value="custom">Custom ball weight</option></select></div>
+<div id="customWrap" hidden><label for="customBall">Custom dough ball <span class="sub">grams</span></label><input id="customBall" type="number" min="120" max="600" step="5" value="250"></div>
+</div>
+</section>
+
+<section class="card">
+<h2>2. Mixing method</h2>
+<div class="method-grid">
+<div class="method-card"><label><input type="radio" name="method" value="mixer" checked> KitchenAid mixer</label><p>Dough hook, controlled speeds, short rest and final knead.</p></div>
+<div class="method-card"><label><input type="radio" name="method" value="manual"> By hand + folds</label><p>No mixer. Hand mix, rest, then stretch-and-fold sets.</p></div>
+</div>
+</section>
+
+<section class="card">
+<h2>3. Fermentation & oven</h2>
+<div class="grid">
+<div><label for="ferment">Total fermentation plan</label><select id="ferment"><option value="24">24 hours</option><option value="48" selected>48 hours</option><option value="72">72 hours</option></select></div>
+<div><label for="oven">Oven</label><select id="oven"><option value="outdoor" selected>Small outdoor pizza oven</option><option value="breville">Breville countertop oven</option><option value="home">Regular home oven</option></select></div>
+</div>
+<label for="bakeTime">I want to bake at</label>
+<input id="bakeTime" type="datetime-local">
+<p class="tiny">Timeline assumes a refrigerator around 4°C / 39°F. Dough develops according to temperature and yeast activity, so use the visual readiness checks too.</p>
+</section>
+
+<section class="card">
+<h2>4. Dough settings</h2>
+<div class="grid3">
+<div><label for="hydration">Hydration %</label><input id="hydration" type="number" min="55" max="80" step="0.5" value="65"></div>
+<div><label for="salt">Salt %</label><input id="salt" type="number" min="1.5" max="4" step="0.1" value="2.7"></div>
+<div><label for="poolishPct">Poolish flour %</label><input id="poolishPct" type="number" min="20" max="60" step="1" value="40"></div>
+</div>
+<div class="grid3">
+<div><label for="oil">Olive oil %</label><input id="oil" type="number" min="0" max="5" step="0.1" value="0"></div>
+<div><label for="honey">Honey %</label><input id="honey" type="number" min="0" max="2" step="0.1" value="0.5"></div>
+<div><label for="yeast">Instant yeast %</label><input id="yeast" type="number" min="0.02" max="1" step="0.01" value="0.10"></div>
+</div>
+<div class="actions"><button type="button" class="ghost" id="resetFormula">Use recommended settings for this oven/time</button></div>
+</section>
+
+<section class="card" aria-live="polite">
+<h2>Your calculated dough</h2>
+<div class="summary" id="stats"></div>
+<div id="ingredients"></div>
+<p class="tiny">Spoon measures are approximate. For yeast and salt, use a gram scale whenever possible.</p>
+</section>
+
+<section class="card">
+<h2>Your backward timeline</h2>
+<div id="timeline" class="timeline"></div>
+<div class="actions"><button id="calendarBtn" type="button" class="secondary">Download calendar milestones (.ics)</button></div>
+</section>
+
+<section class="card">
+<h2>5. Guided cook mode</h2>
+<div class="progress"><div id="bar" class="bar"></div></div>
+<div id="stepHost"></div>
+<div class="actions"><button id="backBtn" class="secondary" type="button">← Back</button><button id="nextBtn" class="primary" type="button">Next step →</button></div>
+</section>
+
+<section class="card">
+<h2>Notes</h2>
+<details open><summary>Poolish style</summary><p>This calculator uses a Vito Iacopelli-inspired concept: a 100%-hydration poolish with a little honey, then final dough mixing, balling and cold fermentation. It is an adaptable calculator rather than a transcript of one specific video formula.</p></details>
+<details><summary>When the dough is ready</summary><p>A mature dough ball is relaxed, slightly domed, aerated around the edges, and stretches without immediately snapping back. If it is still tight and dense, allow more room-temperature proofing. If it is extremely slack and fragile, handle gently and bake sooner.</p></details>
+<details><summary>Flour</summary><p>For a hot outdoor pizza oven, 00 pizza flour is ideal if available. Strong all-purpose or bread flour also works. For a home oven, bread flour or strong AP flour is often easier to brown. Fine semolina is used mainly for peel dusting.</p></details>
+</section>
+
+<footer>Cold Fermentation Pizza Calculator • quantities recalculate instantly</footer>
+</main>
+
+<script>
+const el=id=>document.getElementById(id), num=id=>Number(el(id).value);
+let stepIndex=0, formulaTouched=false;
+const pad=x=>String(x).padStart(2,'0');
+function localInputValue(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())}
+function fmtDate(d){return d.toLocaleString([], {weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}
+const minusH=(d,h)=>new Date(d.getTime()-h*3600000), plusH=(d,h)=>new Date(d.getTime()+h*3600000);
+function g(x,dec=0){return x.toLocaleString(undefined,{maximumFractionDigits:dec})+' g'}
+const ml=x=>Math.round(x)+' mL';
+function spoon(x,kind){
+ const per={salt:5.7,yeast:3.1,honey:7,oil:4.5}[kind], t=x/per;
+ if((kind==='oil'||kind==='honey')&&t>=3)return '≈ '+(t/3).toFixed(t/3<2?1:0)+' tbsp';
+ if(t<0.1)return '< ⅛ tsp'; if(t<0.2)return '≈ ⅛ tsp'; if(t<0.4)return '≈ ¼ tsp'; if(t<0.7)return '≈ ½ tsp'; if(t<0.9)return '≈ ¾ tsp';
+ return '≈ '+t.toFixed(t<3?1:0)+' tsp';
+}
+function temp(c){return Math.round(c)+'°C / '+Math.round(c*9/5+32)+'°F'}
+function method(){return document.querySelector('input[name="method"]:checked').value}
+function recommendedBall(){
+ const base=20*num('diameter')+20, c=el('crust').value;
+ return c==='custom'?num('customBall'):Math.round(base*Number(c)/5)*5;
+}
+function fermentationPlan(){
+ const total=num('ferment'), poolishRT=1, poolishCold=total===24?12:16, warm=total===24?2:3, work=method()==='manual'?1.5:1;
+ return {total,poolishRT,poolishCold,warm,work,ballCold:Math.max(4,total-poolishRT-poolishCold-warm-work)};
+}
+function ovenDefaults(){
+ const o=el('oven').value;
+ if(o==='outdoor')return {hydration:65,oil:0,preheat:.75};
+ if(o==='breville')return {hydration:68,oil:2,preheat:1};
+ return {hydration:70,oil:2.5,preheat:1};
+}
+function yeastDefault(){return num('ferment')===24?.20:num('ferment')===48?.10:.07}
+function applyDefaults(){
+ const d=ovenDefaults(); el('hydration').value=d.hydration; el('oil').value=d.oil; el('yeast').value=yeastDefault().toFixed(2); formulaTouched=false; calculate();
+}
+function dough(){
+ const ball=recommendedBall(), totalDough=ball*num('count');
+ const hyd=num('hydration')/100,salt=num('salt')/100,oil=num('oil')/100,honey=num('honey')/100,yeast=num('yeast')/100;
+ const flour=totalDough/(1+hyd+salt+oil+honey+yeast),water=flour*hyd,saltG=flour*salt,oilG=flour*oil,honeyG=flour*honey,yeastG=flour*yeast;
+ const pFlour=flour*num('poolishPct')/100,pWater=pFlour;
+ return {ball,totalDough,flour,water,saltG,oilG,honeyG,yeastG,pFlour,pWater,fFlour:flour-pFlour,fWater:Math.max(0,water-pWater)};
+}
+function times(){
+ let bake=new Date(el('bakeTime').value); if(isNaN(bake)){bake=new Date(Date.now()+48*3600000);el('bakeTime').value=localInputValue(bake)}
+ const p=fermentationPlan(), od=ovenDefaults(), warm=minusH(bake,p.warm), ballFridge=minusH(warm,p.ballCold), finalMix=minusH(ballFridge,p.work), poolishFridge=minusH(finalMix,p.poolishCold), poolishMix=minusH(poolishFridge,p.poolishRT), preheat=minusH(bake,od.preheat);
+ return {bake,warm,ballFridge,finalMix,poolishFridge,poolishMix,preheat};
+}
+function ovenText(){
+ const o=el('oven').value;
+ if(o==='outdoor')return {name:'small outdoor pizza oven',water:'Use cool final-mix water around '+temp(10)+'. Aim for finished dough around '+temp(24)+'.',preheat:'Preheat about 35–45 minutes. Aim for a stone/floor around '+temp(420)+' (roughly 400–430°C / 750–805°F).',bake:'Launch with a light dusting of fine semolina or flour. Lower the flame slightly after launch if the rim colours too quickly. Bake about 70–110 seconds, turning every 20–25 seconds.'};
+ if(o==='breville')return {name:'Breville countertop oven',water:'Use cool final-mix water around '+temp(10)+'. Aim for finished dough around '+temp(24)+'.',preheat:'Preheat a pizza stone or steel for 45–60 minutes at the maximum setting. Many Breville countertop ovens reach around '+temp(250)+' / 480°F; use your model’s actual maximum.',bake:'Bake on the fully preheated stone/steel about 4–7 minutes. Rotate once if needed. If your model permits broil/grill, a short finish can help the top after the base has set.'};
+ return {name:'regular home oven',water:'Use cool final-mix water around '+temp(10)+'. Aim for finished dough around '+temp(24)+'.',preheat:'Put a stone or steel high in the oven and preheat at maximum temperature for at least 60 minutes. Around '+temp(260)+' / 500°F is excellent if your oven reaches it.',bake:'Bake about 5–9 minutes depending on oven temperature and baking surface. Rotate once. If the base is ready before the top, finish briefly under broil/grill if your setup is safe for it.'};
+}
+function row(label,main,measure=''){return '<div class="row"><span>'+label+'</span><strong>'+main+(measure?'<span class="measure">'+measure+'</span>':'')+'</strong></div>'}
+function event(t,title,body){return '<div class="event"><time>'+fmtDate(t)+'</time><p><strong>'+title+'</strong> — '+body+'</p></div>'}
+function calculate(){
+ el('customWrap').hidden=el('crust').value!=='custom';
+ const d=dough(),p=fermentationPlan(),t=times(),o=ovenText();
+ el('stats').innerHTML='<div class="stat"><b>'+d.ball+' g</b><span>per '+num('diameter')+'" pizza</span></div><div class="stat"><b>'+g(d.totalDough)+'</b><span>total dough</span></div><div class="stat"><b>'+p.total+' h</b><span>fermentation plan</span></div>';
+ let ing=row('Total flour',g(d.flour))+row('Total water',g(d.water),ml(d.water)+' • '+num('hydration')+'% hydration')+row('Fine salt',g(d.saltG,1),spoon(d.saltG,'salt'));
+ if(d.oilG>0)ing+=row('Olive oil',g(d.oilG,1),Math.round(d.oilG/.91)+' mL • '+spoon(d.oilG,'oil'));
+ ing+=row('Honey',g(d.honeyG,1),Math.round(d.honeyG/1.4)+' mL • '+spoon(d.honeyG,'honey'))+row('Instant dry yeast',g(d.yeastG,2),spoon(d.yeastG,'yeast'))+row('Fine semolina for dusting','about '+g(8*num('count')),'not part of the dough');
+ el('ingredients').innerHTML=ing;
+ el('timeline').innerHTML=event(t.poolishMix,'Mix poolish','1 hour at room temperature')+event(t.poolishFridge,'Poolish → refrigerator','cold ferment about '+p.poolishCold+' hours')+event(t.finalMix,method()==='mixer'?'KitchenAid final mix':'Hand mix + folds','make final dough and build strength')+event(t.ballFridge,'Dough balls → refrigerator','cold ferment about '+p.ballCold.toFixed(1)+' hours')+event(t.warm,'Take dough balls out','room-temperature proof about '+p.warm+' hours')+event(t.preheat,'Preheat '+o.name,'fully heat the stone/steel')+event(t.bake,'Bake','stretch, top and cook');
+ renderSteps(); save();
+}
+function qtyPoolish(d){return '<div class="qtybox"><b>Add now — poolish</b>'+row('Flour',g(d.pFlour))+row('Water',g(d.pWater),ml(d.pWater)+' at about '+temp(20))+row('Instant dry yeast',g(d.yeastG,2),spoon(d.yeastG,'yeast'))+row('Honey',g(d.honeyG,1),Math.round(d.honeyG/1.4)+' mL • '+spoon(d.honeyG,'honey'))+'</div>'}
+function qtyFinal(d){return '<div class="qtybox"><b>Add now — final dough</b>'+row('All of the poolish','entire container')+row('Remaining flour',g(d.fFlour))+row('Remaining water',g(d.fWater),ml(d.fWater)+' at about '+temp(10))+row('Fine salt',g(d.saltG,1),spoon(d.saltG,'salt'))+(d.oilG>0?row('Olive oil',g(d.oilG,1),Math.round(d.oilG/.91)+' mL • '+spoon(d.oilG,'oil')):'')+'</div>'}
+function renderSteps(){
+ const d=dough(),p=fermentationPlan(),t=times(),o=ovenText(),m=method();
+ const mixing=m==='mixer'
+ ? {title:'Final dough — KitchenAid',html:qtyFinal(d)+'<ol><li>Fit the dough hook. Put <strong>all poolish</strong> in the bowl with about 80% of the remaining cold water.</li><li>Add the remaining flour. Mix on <strong>speed 1 for 2 minutes</strong> until shaggy.</li><li>Rest <strong>10–15 minutes</strong>.</li><li>Dissolve the salt in the reserved water. Add gradually while mixing on <strong>speed 2</strong>.</li><li>Knead about <strong>5–7 minutes on speed 2</strong>, until smoother and elastic.</li>'+(d.oilG>0?'<li>Add the olive oil slowly near the end and mix until absorbed.</li>':'')+'<li>Stop if the dough gets hot. Target finished dough: about <strong>'+temp(24)+'</strong>.</li></ol><p class="note warn">If the KitchenAid strains, divide the batch instead of forcing the machine.</p>'}
+ : {title:'Final dough — by hand + folds',html:qtyFinal(d)+'<ol><li>Put <strong>all poolish</strong> in a large bowl. Add about 80% of the remaining cold water and loosen the poolish with your hand.</li><li>Add the remaining flour. Mix by hand until no dry flour remains. It can look rough.</li><li>Cover and rest <strong>15–20 minutes</strong>.</li><li>Dissolve the salt in the reserved water. Pinch and fold it through the dough until absorbed.</li>'+(d.oilG>0?'<li>Add the olive oil slowly and squeeze/fold until incorporated.</li>':'')+'<li>Rest <strong>15 minutes</strong>, then perform <strong>3 stretch-and-fold sets</strong>, 15–20 minutes apart. One set = lift and fold the dough from four sides.</li><li>Stop stretching before the dough tears. By the last set it should feel smoother and hold shape better.</li></ol><p class="note good">No long aggressive kneading is needed. Rest + folds build the gluten while keeping the dough manageable.</p>'};
+ const steps=[
+ {title:'Mix the poolish',when:fmtDate(t.poolishMix),html:qtyPoolish(d)+'<ol><li>Dissolve the honey and yeast in the water.</li><li>Add the poolish flour and mix until no dry flour remains.</li><li>Cover and leave at room temperature for about <strong>1 hour</strong>.</li><li>Then refrigerate.</li></ol><p class="note good">After the room-temperature rest, small bubbles are enough. The poolish does not need to double.</p>'},
+ {title:'Cold-ferment the poolish',when:fmtDate(t.poolishFridge),html:'<div class="qtybox"><b>Add now:</b> nothing. The poolish already contains '+g(d.pFlour)+' flour, '+ml(d.pWater)+' water, '+g(d.yeastG,2)+' yeast and '+g(d.honeyG,1)+' honey.</div><p>Refrigerate around <strong>4°C / 39°F</strong> for about <strong>'+p.poolishCold+' hours</strong>. A mature poolish should be bubbly and aromatic, often slightly domed or just starting to flatten.</p>'},
+ {title:mixing.title,when:fmtDate(t.finalMix),html:mixing.html+'<p>'+o.water+'</p>'},
+ {title:'Divide and ball',when:fmtDate(plusH(t.finalMix,m==='manual'?1.15:.55)),html:'<div class="qtybox"><b>Your target now</b>Divide '+g(d.totalDough)+' into <strong>'+num('count')+' balls × '+d.ball+' g</strong>.</div><ol><li>Give the dough a short covered rest after mixing/folds.</li><li>Divide with a bench scraper and weigh each piece.</li><li>Ball with surface tension without tearing the dough.</li><li>Place each ball in a lightly oiled, covered container.</li></ol>'},
+ {title:'Cold-ferment the dough balls',when:fmtDate(t.ballFridge),html:'<div class="qtybox"><b>Add now:</b> nothing. Refrigerate all <strong>'+num('count')+' dough balls × '+d.ball+' g</strong>.</div><p>Keep covered around <strong>4°C / 39°F</strong> for about <strong>'+p.ballCold.toFixed(1)+' hours</strong>.</p>'},
+ {title:'Warm the dough',when:fmtDate(t.warm),html:'<div class="qtybox"><b>Take out now:</b> all '+num('count')+' dough balls. Add nothing.</div><p>Leave covered at room temperature for about <strong>'+p.warm+' hours</strong>.</p><p class="note good">Ready dough should be relaxed and aerated. If it springs back strongly while stretching, cover it and wait another 20–30 minutes.</p>'},
+ {title:'Preheat your oven',when:fmtDate(t.preheat),html:'<div class="qtybox"><b>Selected oven:</b> '+o.name+'</div><p>'+o.preheat+'</p><p class="note">The stone or steel must be fully hot; hot oven air alone is not enough for a good base.</p>'},
+ {title:'Stretch, top and bake',when:fmtDate(t.bake),html:'<div class="qtybox"><b>For each pizza</b>1 dough ball = <strong>'+d.ball+' g</strong> for about <strong>'+num('diameter')+' inches</strong>. Use only a light peel dusting.</div><ol><li>Turn the ball onto a lightly floured surface.</li><li>Press from the centre outward, preserving the airy rim.</li><li>Stretch gently to about '+num('diameter')+'". Do not use a rolling pin.</li><li>Top lightly.</li><li>'+o.bake+'</li></ol><p class="note good">Use the first pizza as calibration. Adjust floor temperature, flame or rack position for the next pizza if needed.</p>'}
+ ];
+ if(stepIndex>=steps.length)stepIndex=steps.length-1;
+ const s=steps[stepIndex];
+ el('stepHost').innerHTML='<p class="when">Step '+(stepIndex+1)+' of '+steps.length+' • '+s.when+'</p><h3>'+s.title+'</h3>'+s.html;
+ el('bar').style.width=((stepIndex+1)/steps.length*100)+'%'; el('backBtn').disabled=stepIndex===0; el('nextBtn').textContent=stepIndex===steps.length-1?'Start over ↺':'Next step →';
+}
+function save(){
+ const ids=['count','diameter','crust','customBall','ferment','oven','bakeTime','hydration','salt','poolishPct','oil','honey','yeast']; const o={method:method()}; ids.forEach(id=>o[id]=el(id).value); localStorage.setItem('pizzaCalcSettings',JSON.stringify(o));
+}
+function load(){
+ try{const o=JSON.parse(localStorage.getItem('pizzaCalcSettings')||'{}');Object.keys(o).forEach(k=>{if(k==='method'){const r=document.querySelector('input[name="method"][value="'+o[k]+'"]');if(r)r.checked=true}else if(el(k))el(k).value=o[k]})}catch(e){}
+}
+function calendar(){
+ const t=times(),p=fermentationPlan(),o=ovenText();
+ const events=[[t.poolishMix,'Pizza: mix poolish','Mix poolish and leave 1 hour at room temperature.'],[t.poolishFridge,'Pizza: refrigerate poolish','Cold ferment poolish about '+p.poolishCold+' hours.'],[t.finalMix,'Pizza: final dough','Use '+(method()==='mixer'?'KitchenAid mixer':'hand mixing and folds')+'.'],[t.ballFridge,'Pizza: refrigerate dough balls','Cold ferment dough balls about '+p.ballCold.toFixed(1)+' hours.'],[t.warm,'Pizza: take dough balls out','Warm/proof about '+p.warm+' hours.'],[t.preheat,'Pizza: preheat '+o.name,'Fully preheat the baking surface.'],[t.bake,'Pizza: bake','Stretch, top and bake.']];
+ const stamp=d=>d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''); let ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Pizza Calculator//EN\r\nCALSCALE:GREGORIAN\r\n';
+ events.forEach((e,i)=>{const end=new Date(e[0].getTime()+30*60000);ics+='BEGIN:VEVENT\r\nUID:pizza-'+i+'-'+Date.now()+'@local\r\nDTSTAMP:'+stamp(new Date())+'\r\nDTSTART:'+stamp(e[0])+'\r\nDTEND:'+stamp(end)+'\r\nSUMMARY:'+e[1].replace(/,/g,'\\,')+'\r\nDESCRIPTION:'+e[2].replace(/,/g,'\\,')+'\r\nBEGIN:VALARM\r\nTRIGGER:-PT15M\r\nACTION:DISPLAY\r\nDESCRIPTION:'+e[1].replace(/,/g,'\\,')+'\r\nEND:VALARM\r\nEND:VEVENT\r\n'});ics+='END:VCALENDAR\r\n';
+ const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pizza-timeline.ics';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+load();
+if(!el('bakeTime').value){const d=new Date(Date.now()+48*3600000);d.setMinutes(0,0,0);el('bakeTime').value=localInputValue(d)}
+applyDefaults();
+['count','diameter','crust','customBall','bakeTime','hydration','salt','poolishPct','oil','honey','yeast'].forEach(id=>{
+ el(id).addEventListener('input',()=>{if(['hydration','salt','poolishPct','oil','honey','yeast'].includes(id))formulaTouched=true;calculate()});
+ el(id).addEventListener('change',calculate);
+});
+el('ferment').addEventListener('change',()=>{if(!formulaTouched)el('yeast').value=yeastDefault().toFixed(2);calculate()});
+el('oven').addEventListener('change',applyDefaults);
+document.querySelectorAll('input[name="method"]').forEach(r=>r.addEventListener('change',()=>{stepIndex=0;calculate()}));
+el('resetFormula').addEventListener('click',applyDefaults);
+el('calendarBtn').addEventListener('click',calendar);
+el('backBtn').addEventListener('click',()=>{if(stepIndex>0)stepIndex--;renderSteps()});
+el('nextBtn').addEventListener('click',()=>{stepIndex=stepIndex===7?0:stepIndex+1;renderSteps()});
+calculate();
+</script>
+</body>
+</html>
